@@ -7,10 +7,44 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="header-sec">
-      <div class="nav-sec"></div>
+    <!-- =========== -->
+    <!-- Header Section -->
+    <!-- =========== -->
+
+    <div class="header">
+      <!-- =========== -->
+      <!-- Navbar Section -->
+      <!-- =========== -->
+
+      <div class="navbar">
+        <div class="logo">
+          <a href="index.html" class="logo-name">TicTacZone</a>
+        </div>
+        <div class="toggle-btn" onclick="toggleMenu()">☰</div>
+        <div class="nav-links" id="nav-links">
+          <a href="index.html" class="nav-link-part">HOME</a>
+          <a href="#" class="nav-link-part">RULES</a>
+          <a href="#" class="nav-link-part">TUTORIAL</a>
+          <a href="#play-game" class="nav-link-part">PLAY</a>
+        </div>
+      </div>
+      <!-- =========== -->
+      <!-- Header Section content-->
+      <!-- =========== -->
+      <div class="header-content">
+        <h1>Welcome To the TicTacZone</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+        <button id="play-g">Let's Play</button>
+      </div>
     </div>
-    <div class="game-sec">
+
+    <!-- =========== -->
+    <!-- game-sec -->
+    <!-- =========== -->
+    <div class="game-sec" id="play-game">
       <div class="game-title">
         <h1>Tic Tac Toe</h1>
       </div>
@@ -32,7 +66,14 @@
         <p>Copyright © TicTacZone 2024, All Rights Reserved.</p>
       </div>
     </div>
-
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="close-modal">&times;</span>
+        <h2 id="modal-message"></h2>
+        <button id="modal-reset-button">Reset Game</button>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

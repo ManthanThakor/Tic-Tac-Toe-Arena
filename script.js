@@ -1,9 +1,16 @@
 const players = ["X", "O"];
 let currentPlayer = players[0];
+console.log(`Default Player: ${currentPlayer}`);
+
 let GameBoardStatus = ["", "", "", "", "", "", "", "", ""];
+let gameOver = false;
 
 const cells = document.querySelectorAll(".game-cells");
 const resetButton = document.getElementById("reset-game");
+const modal = document.getElementById("modal");
+const modalMessage = document.getElementById("modal-message");
+const closeModalButton = document.getElementById("close-modal");
+const modalResetButton = document.getElementById("modal-reset-button");
 
 const winningConditions = [
   [0, 1, 2],
@@ -17,41 +24,41 @@ const winningConditions = [
 ];
 
 function playGameCells(event) {
+  if (gameOver) return;
+
   const gameCells = event.target;
   const gameCellsIndex = gameCells.getAttribute("data-index");
 
-  console.log(`Cell clicked: ${gameCellsIndex}`);
-  console.log(`Current player: ${currentPlayer}`);
-
   if (GameBoardStatus[gameCellsIndex] !== "") {
-    // console.log("Cell already occupied");
     return;
   }
-
   GameBoardStatus[gameCellsIndex] = currentPlayer;
-  gameCells.textContent = currentPlayer;
+  console.log(GameBoardStatus);
 
-  if (checkWinner()) {
-    // console.log(`Player ${currentPlayer} wins!`);
-    alert(`Player ${currentPlayer} wins!`);
+  gameCells.textContent = currentPlayer;
+  gameCells.classList.add(currentPlayer === players[0] ? "x" : "o");
+
+  const winningCombination = checkWinner();
+  if (winningCombination) {
+    gameOver = true;
+    showModal(`Player ${currentPlayer} wins!`);
     return;
   }
 
-  if (GameBoardStatus.every((gameCells) => gameCells)) {
-    console.log("It's a draw!");
-    alert("It's a draw!");
+  if (GameBoardStatus.every((cell) => cell)) {
+    gameOver = true;
+    showModal("It's a draw!");
     return;
   }
 
   currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-  // console.log(`Next Player: ${currentPlayer}`);
+  console.log(`Current Player: ${currentPlayer}`);
 }
 
 function checkWinner() {
   for (let i = 0; i < winningConditions.length; i++) {
     const [a, b, c] = winningConditions[i];
-
-    console.log(`Checking condition: ${a}, ${b}, ${c}`);
+    console.log(`CheckWinner: ${[a, b, c]}`);
 
     if (
       GameBoardStatus[a] &&
@@ -59,7 +66,13 @@ function checkWinner() {
       GameBoardStatus[a] === GameBoardStatus[c]
     ) {
       console.log(
-        `Winning combination: ${GameBoardStatus[a]}, ${GameBoardStatus[b]}, ${GameBoardStatus[c]}`
+        `Winner ${
+          GameBoardStatus[a] +
+          " " +
+          GameBoardStatus[b] +
+          " " +
+          GameBoardStatus[c]
+        }`
       );
       return true;
     }
@@ -67,16 +80,44 @@ function checkWinner() {
   return false;
 }
 
+function showModal(message) {
+  modalMessage.textContent = message;
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  modal.style.display = "none";
+}
+
 function resetGame() {
   GameBoardStatus = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = players[0];
-  cells.forEach((cell) => (cell.textContent = ""));
-  // console.log("Game reset. Current Player: " + currentPlayer);
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("x", "o");
+  });
+  gameOver = false;
+  closeModal();
 }
 
 cells.forEach((cell) => {
-  // console.log(`Adding event listener to cell: ${cell.getAttribute("data-index")}`);
   cell.addEventListener("click", playGameCells);
 });
 
 resetButton.addEventListener("click", resetGame);
+closeModalButton.addEventListener("click", closeModal);
+modalResetButton.addEventListener("click", resetGame);
+
+const playButton = document.getElementById("play-g");
+
+playButton.addEventListener("click", () => {
+  const gameSection = document.getElementById("play-game");
+
+  // Scroll to the game section smoothly
+  gameSection.scrollIntoView({ behavior: "smooth" });
+
+  // Add glowing effect to game cells
+  cells.forEach((cell) => {
+    cell.classList.add("glow");
+  });
+});
