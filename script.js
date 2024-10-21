@@ -19,28 +19,39 @@ const winningConditions = [
 function playGameCells(event) {
   const gameCells = event.target;
   const gameCellsIndex = gameCells.getAttribute("data-index");
-  if (GameBoardStatus[gameCellsIndex] !== "") return;
+
+  console.log(`Cell clicked: ${gameCellsIndex}`);
+  console.log(`Current player: ${currentPlayer}`);
+
+  if (GameBoardStatus[gameCellsIndex] !== "") {
+    // console.log("Cell already occupied");
+    return;
+  }
 
   GameBoardStatus[gameCellsIndex] = currentPlayer;
   gameCells.textContent = currentPlayer;
 
   if (checkWinner()) {
+    // console.log(`Player ${currentPlayer} wins!`);
     alert(`Player ${currentPlayer} wins!`);
     return;
   }
 
   if (GameBoardStatus.every((gameCells) => gameCells)) {
+    console.log("It's a draw!");
     alert("It's a draw!");
     return;
   }
 
   currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-  console.log(`Current Player : ${currentPlayer}`);
+  // console.log(`Next Player: ${currentPlayer}`);
 }
 
 function checkWinner() {
   for (let i = 0; i < winningConditions.length; i++) {
     const [a, b, c] = winningConditions[i];
+
+    console.log(`Checking condition: ${a}, ${b}, ${c}`);
 
     if (
       GameBoardStatus[a] &&
@@ -48,7 +59,7 @@ function checkWinner() {
       GameBoardStatus[a] === GameBoardStatus[c]
     ) {
       console.log(
-        GameBoardStatus[a] + " " + GameBoardStatus[b] + " " + GameBoardStatus[c]
+        `Winning combination: ${GameBoardStatus[a]}, ${GameBoardStatus[b]}, ${GameBoardStatus[c]}`
       );
       return true;
     }
@@ -60,7 +71,12 @@ function resetGame() {
   GameBoardStatus = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = players[0];
   cells.forEach((cell) => (cell.textContent = ""));
+  // console.log("Game reset. Current Player: " + currentPlayer);
 }
 
-cells.forEach((cell) => cell.addEventListener("click", playGameCells));
+cells.forEach((cell) => {
+  // console.log(`Adding event listener to cell: ${cell.getAttribute("data-index")}`);
+  cell.addEventListener("click", playGameCells);
+});
+
 resetButton.addEventListener("click", resetGame);
