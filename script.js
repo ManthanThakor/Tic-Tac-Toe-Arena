@@ -112,12 +112,5 @@ const playButton = document.getElementById("play-g");
 
 playButton.addEventListener("click", () => {
   const gameSection = document.getElementById("play-game");
-
-  // Scroll to the game section smoothly
   gameSection.scrollIntoView({ behavior: "smooth" });
-
-  // Add glowing effect to game cells
-  cells.forEach((cell) => {
-    cell.classList.add("glow");
-  });
 });
